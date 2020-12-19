@@ -1,0 +1,563 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 13.0
+-- Dumped by pg_dump version 13.0
+
+-- Started on 2020-12-19 23:56:22
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- TOC entry 2 (class 3079 OID 16384)
+-- Name: adminpack; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS adminpack WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 3058 (class 0 OID 0)
+-- Dependencies: 2
+-- Name: EXTENSION adminpack; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION adminpack IS 'administrative functions for PostgreSQL';
+
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 202 (class 1259 OID 20183)
+-- Name: aircraft; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.aircraft (
+    aircraft_id character varying(12) NOT NULL,
+    type character varying,
+    year numeric(4,0),
+    capacity numeric,
+    tech_service character varying,
+    availability character varying,
+    airport_id numeric(12,0)
+);
+
+
+ALTER TABLE public.aircraft OWNER TO postgres;
+
+--
+-- TOC entry 201 (class 1259 OID 20175)
+-- Name: airport; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.airport (
+    airport_id numeric(12,0) NOT NULL,
+    country character varying,
+    name character varying
+);
+
+
+ALTER TABLE public.airport OWNER TO postgres;
+
+--
+-- TOC entry 204 (class 1259 OID 20222)
+-- Name: bussiness; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.bussiness (
+    bussiness_id numeric(12,0) NOT NULL,
+    passanger_id numeric(12,0),
+    status character varying,
+    baggage_allowance character varying,
+    business_launge character varying,
+    refaund_cost character varying,
+    rebuking_cost character varying,
+    change_priority character varying
+);
+
+
+ALTER TABLE public.bussiness OWNER TO postgres;
+
+--
+-- TOC entry 205 (class 1259 OID 20288)
+-- Name: crew; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.crew (
+    crewmate_id numeric(12,0) NOT NULL,
+    aircraft_id character varying(12),
+    firstname character varying,
+    lastname character varying,
+    hire_date date,
+    "position" character varying,
+    hours_per_week numeric,
+    salary numeric,
+    gender character varying,
+    age numeric
+);
+
+
+ALTER TABLE public.crew OWNER TO postgres;
+
+--
+-- TOC entry 203 (class 1259 OID 20209)
+-- Name: econom; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.econom (
+    econom_id numeric(12,0) NOT NULL,
+    passanger_id numeric(12,0),
+    status character varying,
+    baggage_allowance character varying,
+    business_launge character varying,
+    refaund_cost character varying,
+    rebuking_cost character varying,
+    change_priority character varying
+);
+
+
+ALTER TABLE public.econom OWNER TO postgres;
+
+--
+-- TOC entry 206 (class 1259 OID 20314)
+-- Name: flight_information; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.flight_information (
+    flight_id character varying(12) NOT NULL,
+    aircraft_id character varying(12),
+    day_of_week character varying,
+    origin character varying,
+    destination character varying,
+    scheduled_time_of_departure character varying,
+    estimated_time_of_departure character varying,
+    departure_status character varying,
+    scheduled_time_of_arrival character varying,
+    estimated_time_of_arrival character varying,
+    actual_time_of_arrival character varying,
+    arrival_status character varying
+);
+
+
+ALTER TABLE public.flight_information OWNER TO postgres;
+
+--
+-- TOC entry 207 (class 1259 OID 20361)
+-- Name: passangers; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.passangers (
+    passanger_id numeric(12,0) NOT NULL,
+    flight_id character varying(12),
+    firstname character varying,
+    lastname character varying,
+    passport_id character varying,
+    typeofage character varying
+);
+
+
+ALTER TABLE public.passangers OWNER TO postgres;
+
+--
+-- TOC entry 208 (class 1259 OID 20375)
+-- Name: revenue; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.revenue (
+    revenue_id numeric(12,0) NOT NULL,
+    aircraft_id character varying(12),
+    day_of_week character varying,
+    total_soldtick numeric,
+    total_clasic numeric,
+    total_plus numeric,
+    total_saver numeric,
+    total_flex numeric,
+    total_income numeric
+);
+
+
+ALTER TABLE public.revenue OWNER TO postgres;
+
+--
+-- TOC entry 209 (class 1259 OID 20393)
+-- Name: tickets; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.tickets (
+    ticked_id numeric(12,0) NOT NULL,
+    passanger_id numeric(12,0),
+    status character varying,
+    place character varying,
+    myupgrade character varying,
+    ticket_cost character varying
+);
+
+
+ALTER TABLE public.tickets OWNER TO postgres;
+
+--
+-- TOC entry 3045 (class 0 OID 20183)
+-- Dependencies: 202
+-- Data for Name: aircraft; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.aircraft (aircraft_id, type, year, capacity, tech_service, availability, airport_id) FROM stdin;
+1	Airbus A320-200	2006	148	\N	YES	3
+3	Airbus A321-200	2007	179	\N	YES	1
+4	Airbus A321-200	2007	179	\N	YES	4
+5	Airbus A321neo	2017	179	\N	WAITING	5
+6	Airbus A321LR	2019	166	\N	WAITING	6
+8	Embraer 190-E2	2018	108	\N	YES	7
+9	Airbus A321-200	2007	179	\N	YES	2
+10	Airbus A320-200	2006	148	\N	YES	4
+2	Airbus A320neo	2016	148	IN TECH SERVICE	YES	\N
+7	Boeing 767-300ERF	2013	233	IN TECH SERVICE	YES	\N
+\.
+
+
+--
+-- TOC entry 3044 (class 0 OID 20175)
+-- Dependencies: 201
+-- Data for Name: airport; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.airport (airport_id, country, name) FROM stdin;
+1	KAZAKHSTAN	NURSULTAN NAZARBAYEV
+2	KAZAKHSTAN	ALMATY
+3	KAZAKHSTAN	AKTAU
+4	KAZAKHSTAN	AKTOBE
+5	KAZAKHSTAN	SHYMKENT
+6	FRANCE	Aéroport de Paris-Charles de Gaulle
+7	GERMANY	Merzbrück Airport
+8	ITALY	Leonardo da Vinci–Fiumicino Airport
+9	ITALY	Malpensa International Airport
+10	ITALY	Venice Marco Polo Airport
+\.
+
+
+--
+-- TOC entry 3047 (class 0 OID 20222)
+-- Dependencies: 204
+-- Data for Name: bussiness; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.bussiness (bussiness_id, passanger_id, status, baggage_allowance, business_launge, refaund_cost, rebuking_cost, change_priority) FROM stdin;
+1	8	saver	2PC*32KG	YES	7000KZT	7000KZT	HIGH
+2	9	flex	2PC*32KG	YES	FREE	FREE	HIGH
+3	10	saver	2PC*32KG	YES	7000KZT	7000KZT	HIGH
+4	11	flex	2PC*32KG	YES	FREE	FREE	HIGH
+5	12	flex	2PC*32KG	YES	FREE	FREE	HIGH
+\.
+
+
+--
+-- TOC entry 3048 (class 0 OID 20288)
+-- Dependencies: 205
+-- Data for Name: crew; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.crew (crewmate_id, aircraft_id, firstname, lastname, hire_date, "position", hours_per_week, salary, gender, age) FROM stdin;
+1	1	Azamat	Aitkaziev	2012-01-01	FIRST PILOT	36	1500000	male	30
+2	1	Erkebulan	Borangaziyev	2016-05-05	SECOND PILOT	36	1200000	male	26
+3	1	Aidana	Armakhan	2017-05-05	STEWARDESS	25	300000	female	24
+4	1	Fergazy	Adilbekov	2017-06-06	STEWARDESS	26	310000	male	25
+5	1	Ayazhan	Akilbekovna	2017-07-06	STEWARDESS	27	320000	female	26
+6	2	Azamat	Kairula	2012-02-01	FIRST PILOT	38	1540000	male	30
+7	2	Aslan	Borangaziyev	2016-06-05	SECOND PILOT	38	1240000	male	26
+8	2	Dilnaz	Armakhan	2017-06-05	STEWARDESS	26	350000	female	24
+9	2	Dosbol	Adilbekov	2017-07-06	STEWARDESS	27	380000	male	25
+10	2	Akmaral	Akilbekovna	2017-08-06	STEWARDESS	28	390000	female	26
+11	3	Aslan	Boskarbekov	2012-09-01	FIRST PILOT	39	1550000	male	30
+12	3	Kairat	Torangaziyev	2016-07-05	SECOND PILOT	39	1250000	male	26
+13	3	Ayazhan	Barmakhan	2017-07-05	STEWARDESS	27	390000	female	24
+14	3	Akdos	Adilbekov	2017-08-06	STEWARDESS	29	400000	male	25
+15	3	Aktas	Akilbekovna	2017-09-06	STEWARDESS	30	410000	female	26
+16	4	Barzamat	Aitkaziev	2012-01-01	FIRST PILOT	36	1500000	male	30
+17	4	Erke	Borangaziyev	2016-05-05	SECOND PILOT	36	1200000	male	26
+18	4	Aikumis	Armakhan	2017-05-05	STEWARDESS	25	300000	female	24
+19	4	Sapar	Adilbekov	2017-06-06	STEWARDESS	26	310000	male	25
+20	4	Ayaz	Akilbekovna	2017-07-06	STEWARDESS	27	320000	female	26
+21	5	Dilya	Zholaman	2012-01-01	FIRST PILOT	36	1500000	female	30
+22	5	Zhandarbek	Borangaziyev	2016-05-05	SECOND PILOT	36	1200000	male	26
+23	5	Sophia	Armakhan	2017-05-05	STEWARDESS	25	300000	female	24
+24	5	Gulnur	Adilbekova	2017-06-06	STEWARDESS	26	310000	female	25
+25	5	Akmaral	Toktarbekovna	2017-07-06	STEWARDESS	27	320000	female	26
+26	6	Tomiris	Aubakirova	2012-01-01	FIRST PILOT	36	1500000	female	30
+27	6	Nurbek	Aldash	2016-05-05	SECOND PILOT	36	1200000	male	26
+28	6	Ayanbek	Arystangaliev	2017-05-05	STEWARDESS	25	300000	male	24
+29	6	Uria	Makenskaya	2017-06-06	STEWARDESS	26	310000	female	25
+30	6	Aidos	Marat	2017-07-06	STEWARDESS	27	320000	male	26
+31	7	Aslan	Zholdybai	2012-01-01	FIRST PILOT	36	1500000	male	30
+32	7	Bekzhan	Beken	2016-05-05	SECOND PILOT	36	1200000	male	26
+33	7	Aisholpan	Sergazievna	2017-05-05	STEWARDESS	25	300000	female	24
+34	7	Azamat	Rustemov	2017-06-06	STEWARDESS	26	310000	male	25
+35	7	Maria	Akilbekovna	2017-07-06	STEWARDESS	27	320000	female	26
+36	8	Aksultan	Yeldasbekov	2012-01-01	FIRST PILOT	36	1500000	male	30
+37	8	Myrzabek	Borangaziyev	2016-05-05	SECOND PILOT	36	1200000	male	26
+38	8	Natasha	Karaleva	2017-05-05	STEWARDESS	25	300000	female	24
+39	8	Malik	Ibragimov	2017-06-06	STEWARDESS	26	310000	male	25
+40	8	Sophia	Manis	2017-07-06	STEWARDESS	27	320000	female	26
+41	9	Iris	Dusendlof	2012-01-01	FIRST PILOT	36	1500000	female	30
+42	9	Abulkhair	Borangaziyev	2016-05-05	SECOND PILOT	36	1200000	male	26
+43	9	Dariya	Armakhan	2017-05-05	STEWARDESS	25	300000	female	24
+44	9	Ainur	Sharipovna	2017-06-06	STEWARDESS	26	310000	female	25
+45	9	Quralai	Akzhibekovna	2017-07-06	STEWARDESS	27	320000	female	26
+46	5	Ayazhan	Kanas	2012-01-01	FIRST PILOT	36	1500000	female	30
+47	10	Zhanna	Dark	2016-05-05	SECOND PILOT	36	1200000	female	26
+48	10	Sophia	Aya	2017-05-05	STEWARDESS	25	300000	female	24
+49	10	Anna	Michalkova	2017-06-06	STEWARDESS	26	310000	female	25
+50	10	Yuna	Kim	2017-07-06	STEWARDESS	27	320000	female	26
+\.
+
+
+--
+-- TOC entry 3046 (class 0 OID 20209)
+-- Dependencies: 203
+-- Data for Name: econom; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.econom (econom_id, passanger_id, status, baggage_allowance, business_launge, refaund_cost, rebuking_cost, change_priority) FROM stdin;
+1	1	classic	1PC*23KG	NONE	7000KZT	7000KZT	LOW
+2	2	classic	1PC*23KG	NONE	7000KZT	7000KZT	LOW
+3	3	classic	1PC*23KG	NONE	7000KZT	7000KZT	LOW
+4	4	plus	2PC*23KG	NONE	FREE	FREE	MEDIUM
+5	5	plus	2PC*23KG	NONE	FREE	FREE	MEDIUM
+6	6	classic	1PC*23KG	NONE	7000KZT	7000KZT	LOW
+7	7	plus	2PC*23KG	NONE	FREE	FREE	MEDIUM
+\.
+
+
+--
+-- TOC entry 3049 (class 0 OID 20314)
+-- Dependencies: 206
+-- Data for Name: flight_information; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.flight_information (flight_id, aircraft_id, day_of_week, origin, destination, scheduled_time_of_departure, estimated_time_of_departure, departure_status, scheduled_time_of_arrival, estimated_time_of_arrival, actual_time_of_arrival, arrival_status) FROM stdin;
+KC314	1	SUNDAY	AKTAU	NUR-SULTAN	21:10	21:11	FLEW OUT	00:40	00:42	00:39	ARRIVED
+KC622	2	SUNDAY	NUR-SULTAN	ALMATY	23:50	13:49	FLEW OUT	01:30	01:29	01:29	ARRIVED
+KC672	3	SUNDAY	NUR-SULTAN	ALMATY	09:45	09:42	FLEW OUT	11:25	11:25	11:26	ARRIVED
+KC864	4	MONDAY	AKTOBE	ALMATY	13:10	13:11	FLEW OUT	16:45	16:44	16:44	ARRIVED
+KC912	5	SUNDAY	ISTAMBUL	ALMATY	22:05	22:06	FLEW OUT	06:25	06:18	06:18	ARRIVED
+KC318	6	SATURDAY	ATYRAU	ALMATY	10:10	10:25	FLEW OUT	14:05	14:04	14:06	ARRIVED
+KC886	7	TUESDAY	ATYRAU	ALMATY	22:00	22:15	FLEW OUT	02:00	01:52	01:51	ARRIVED
+KC986	8	WEDNESDAY	KYZYLORDA	ALMATY	15:30	15:26	FLEW OUT	18:00	18:10	18:02	ARRIVED
+KC916	9	THURSDAY	ANTALYA	ALMATY	13:10	13:04	FLEW OUT	22:40	22:30	22:41	ARRIVED
+KC4074	10	FRIDAY	KIEV	ALMATY	04:45	04:51	FLEW OUT	13:35	13:55	13:45	ARRIVED
+\.
+
+
+--
+-- TOC entry 3050 (class 0 OID 20361)
+-- Dependencies: 207
+-- Data for Name: passangers; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.passangers (passanger_id, flight_id, firstname, lastname, passport_id, typeofage) FROM stdin;
+1	KC314	Sakura	Haruna	S78945652324	Adult
+2	KC622	Ino	Kamado	S78974565123	Adult
+3	KC672	Shikamaro	Nara	S78564562321	Infant
+4	KC314	Naruto	Uzumaki	S78546542321	Adult
+5	KC314	Boruto	Uzumaki	S78954565123	Child
+6	KC864	Minato	Namikadze	S78954562123	Infant
+7	KC864	Kakashi	Hatake	S75845654236	Infant
+8	KC912	Gai	Sensei	S78956542325	Infant
+9	KC912	Rock	Lee	S78952354123	Adult
+10	KC318	Metal	Lee	S78954565232	Child
+11	KC886	Hinata	Hyuga	S74565458201	Adult
+12	KC886	Temari	Shingen	S78545654236	Adult
+\.
+
+
+--
+-- TOC entry 3051 (class 0 OID 20375)
+-- Dependencies: 208
+-- Data for Name: revenue; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.revenue (revenue_id, aircraft_id, day_of_week, total_soldtick, total_clasic, total_plus, total_saver, total_flex, total_income) FROM stdin;
+1	1	MONDAY	300	180	60	40	20	16300000
+2	1	TUESDAY	400	200	100	80	20	22540000
+3	1	WEDNESDAY	400	200	150	45	5	20485000
+4	1	THUESDAY	500	200	150	100	50	29750000
+5	1	FRIDAY	400	200	100	80	20	22540000
+6	1	SATURDAY	600	300	100	150	50	35950000
+7	1	SUNDAY	400	200	150	45	5	20485000
+\.
+
+
+--
+-- TOC entry 3052 (class 0 OID 20393)
+-- Dependencies: 209
+-- Data for Name: tickets; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tickets (ticked_id, passanger_id, status, place, myupgrade, ticket_cost) FROM stdin;
+1	1	CHECKED	ABC78	NONE	44000KZT
+2	2	CHECKED	ABC79	NONE	44102KZT
+3	3	CHECKED	ABC80	NONE	44153KZT
+4	4	REFUND	ABD81	NONE	49000KZT
+5	5	CHECKED	ABD82	UPGRADE	49000KZT
+6	6	CHECKED	ABC83	NONE	44000KZT
+7	7	CHECKED	KE780	\N	85000KZT
+8	8	CHECKED	KE785	\N	85112KZT
+9	9	CHECKED	KE781	\N	102112KZT
+10	10	REFUND	KE783	\N	85000KZT
+11	11	CHECKED	KE784	\N	102000KZT
+12	12	CHECKED	KE790	\N	102000KZT
+\.
+
+
+--
+-- TOC entry 2893 (class 2606 OID 20190)
+-- Name: aircraft aircraft_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.aircraft
+    ADD CONSTRAINT aircraft_pkey PRIMARY KEY (aircraft_id);
+
+
+--
+-- TOC entry 2891 (class 2606 OID 20182)
+-- Name: airport airport_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.airport
+    ADD CONSTRAINT airport_pkey PRIMARY KEY (airport_id);
+
+
+--
+-- TOC entry 2897 (class 2606 OID 20229)
+-- Name: bussiness bussiness_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.bussiness
+    ADD CONSTRAINT bussiness_pkey PRIMARY KEY (bussiness_id);
+
+
+--
+-- TOC entry 2899 (class 2606 OID 20295)
+-- Name: crew crew_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.crew
+    ADD CONSTRAINT crew_pkey PRIMARY KEY (crewmate_id);
+
+
+--
+-- TOC entry 2895 (class 2606 OID 20216)
+-- Name: econom econom_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.econom
+    ADD CONSTRAINT econom_pkey PRIMARY KEY (econom_id);
+
+
+--
+-- TOC entry 2901 (class 2606 OID 20321)
+-- Name: flight_information flight_information_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.flight_information
+    ADD CONSTRAINT flight_information_pkey PRIMARY KEY (flight_id);
+
+
+--
+-- TOC entry 2903 (class 2606 OID 20368)
+-- Name: passangers passangers_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.passangers
+    ADD CONSTRAINT passangers_pkey PRIMARY KEY (passanger_id);
+
+
+--
+-- TOC entry 2905 (class 2606 OID 20382)
+-- Name: revenue revenue_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.revenue
+    ADD CONSTRAINT revenue_pkey PRIMARY KEY (revenue_id);
+
+
+--
+-- TOC entry 2907 (class 2606 OID 20400)
+-- Name: tickets tickets_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT tickets_pkey PRIMARY KEY (ticked_id);
+
+
+--
+-- TOC entry 2908 (class 2606 OID 20191)
+-- Name: aircraft aircraft_airport_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.aircraft
+    ADD CONSTRAINT aircraft_airport_id_fkey FOREIGN KEY (airport_id) REFERENCES public.airport(airport_id);
+
+
+--
+-- TOC entry 2909 (class 2606 OID 20296)
+-- Name: crew crew_aircraft_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.crew
+    ADD CONSTRAINT crew_aircraft_id_fkey FOREIGN KEY (aircraft_id) REFERENCES public.aircraft(aircraft_id);
+
+
+--
+-- TOC entry 2910 (class 2606 OID 20322)
+-- Name: flight_information flight_information_aircraft_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.flight_information
+    ADD CONSTRAINT flight_information_aircraft_id_fkey FOREIGN KEY (aircraft_id) REFERENCES public.aircraft(aircraft_id);
+
+
+--
+-- TOC entry 2911 (class 2606 OID 20369)
+-- Name: passangers passangers_flight_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.passangers
+    ADD CONSTRAINT passangers_flight_id_fkey FOREIGN KEY (flight_id) REFERENCES public.flight_information(flight_id);
+
+
+--
+-- TOC entry 2912 (class 2606 OID 20383)
+-- Name: revenue revenue_aircraft_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.revenue
+    ADD CONSTRAINT revenue_aircraft_id_fkey FOREIGN KEY (aircraft_id) REFERENCES public.aircraft(aircraft_id);
+
+
+--
+-- TOC entry 2913 (class 2606 OID 20401)
+-- Name: tickets tickets_passanger_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tickets
+    ADD CONSTRAINT tickets_passanger_id_fkey FOREIGN KEY (passanger_id) REFERENCES public.passangers(passanger_id);
+
+
+-- Completed on 2020-12-19 23:56:22
+
+--
+-- PostgreSQL database dump complete
+--
+
